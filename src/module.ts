@@ -38,7 +38,7 @@ export default defineNuxtModule<BullwarkOptions>({
       path: resolver.resolve('./runtime/components'),
     })
     addPlugin({
-      src: resolver.resolve('./runtime/plugin.ts'),
+      src: resolver.resolve('./runtime/plugin'),
       mode: 'client',
     })
   },

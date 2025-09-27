@@ -5,7 +5,7 @@
   "repository": "@dutchbull95/bullwark-nuxt",
   "license": "MIT",
   "publishConfig": {
-    "access": "public",
+    "access": "restricted",
     "registry": "https://registry.npmjs.org/"
   },
   "type": "module",
