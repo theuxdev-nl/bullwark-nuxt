@@ -1,11 +1,12 @@
 {
-  "name": "@dutchbull95/bullwark-nuxt",
+  "name": "@theuxdev/bullwark-nuxt",
   "version": "0.0.8",
   "description": "Module to integrate Bullwark into your Nuxt app",
-  "repository": "@dutchbull95/bullwark-nuxt",
+  "repository": "@theuxdev/bullwark-nuxt",
+  "author": "Paul 'Bull' Brouwer",
   "license": "MIT",
   "publishConfig": {
-    "access": "restricted",
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "type": "module",
@@ -38,7 +39,6 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@dutchbull95/bullwark-sdk": "^0.0.1",
     "@nuxt/kit": "^4.1.2",
     "jose": "^6.1.0"
   },
