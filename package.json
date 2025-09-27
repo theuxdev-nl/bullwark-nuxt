@@ -1,8 +1,8 @@
 {
   "name": "bullwark-nuxt",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Module to integrate Bullwark into your Nuxt app",
-  "repository": "theuxdev/bullwark-nuxt",
+  "repository": "theuxdev/Bullwark Nuxt",
   "license": "MIT",
   "type": "module",
   "exports": {

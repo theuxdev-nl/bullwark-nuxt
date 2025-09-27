@@ -2,12 +2,12 @@
 Get your module up and running quickly.
 
 Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
+- Name: Bullwark Nuxt
 - Package name: my-module
-- Description: My new Nuxt module
+- Description: Bullwark Nuxt is a Nuxt module to quickly and easily connect your Nuxt install to Bullwark for authn and authz. 
 -->
 
-# My Module
+# Bullwark Nuxt
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -35,7 +35,7 @@ Install the module to your Nuxt application with one command:
 npx nuxi module add my-module
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+That's it! You can now use Bullwark Nuxt in your Nuxt app ✨
 
 
 ## Contribution

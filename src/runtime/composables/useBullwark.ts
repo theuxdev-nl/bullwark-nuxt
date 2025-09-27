@@ -1,17 +1,16 @@
 import { useNuxtApp, useState } from '#app'
 import type { BullwarkSdk, LoginCredentials, User } from '@theuxdev/bullwark-npm-sdk'
-import { readonly } from "@vue/reactivity";
+import { readonly } from '@vue/reactivity'
 
 export const useBullwark = () => {
-
   const { $bullwark } = useNuxtApp()
 
   const bullwark = $bullwark as BullwarkSdk
 
   if (import.meta.client) {
-    bullwark.on('userHydrated', (data) => user.value = data.user)
-    bullwark.on('userLoggedIn', (data) => user.value = data.user)
-    bullwark.on('userRefreshed', (data) => user.value = data.user)
+    bullwark.on('userHydrated', data => user.value = data.user)
+    bullwark.on('userLoggedIn', data => user.value = data.user)
+    bullwark.on('userRefreshed', data => user.value = data.user)
     bullwark.on('userLoggedOut', () => user.value = null)
   }
 
@@ -24,7 +23,6 @@ export const useBullwark = () => {
 
   const isLoggedIn = useState<boolean>('bullwark.isLoggedIn', () => false)
   const loading = useState<boolean>('bullwark.loading', () => false)
-
 
   const isInitialized = useState<boolean>('bullwark.initialized', () => false)
 
@@ -49,7 +47,8 @@ export const useBullwark = () => {
       const data = await bullwark.login(credentials)
       syncFromSDK()
       return data
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -58,7 +57,8 @@ export const useBullwark = () => {
     try {
       await bullwark.logout()
       syncFromSDK()
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Logout error:', error)
       throw error
     }
@@ -66,7 +66,7 @@ export const useBullwark = () => {
 
   const userCan = (abilityUuid: string) => {
     if (!abilityUuid) {
-      console.error("AbilityUuid missing")
+      console.error('AbilityUuid missing')
       return false
     }
     if (import.meta.server) return false
@@ -75,7 +75,7 @@ export const useBullwark = () => {
 
   const userCanKey = (abilityKey: string) => {
     if (!abilityKey) {
-      console.error("AbilityKey missing")
+      console.error('AbilityKey missing')
       return false
     }
     if (import.meta.server) return false
@@ -84,7 +84,7 @@ export const useBullwark = () => {
 
   const userHasRole = (roleUuid: string) => {
     if (!roleUuid) {
-      console.error("RoleUuid missing")
+      console.error('RoleUuid missing')
       return false
     }
     if (import.meta.server) return false // No role check on server
@@ -93,7 +93,7 @@ export const useBullwark = () => {
 
   const userHasRoleKey = (roleKey: string) => {
     if (!roleKey) {
-      console.error("RoleKey missing")
+      console.error('RoleKey missing')
       return false
     }
     if (import.meta.server) return false // No role check on server
@@ -112,6 +112,6 @@ export const useBullwark = () => {
     userHasRole,
     userHasRoleKey,
     syncFromSDK,
-    isInitialized: readonly(isInitialized)
+    isInitialized: readonly(isInitialized),
   }
 }

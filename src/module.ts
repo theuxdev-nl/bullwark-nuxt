@@ -1,4 +1,4 @@
-import {defineNuxtModule, createResolver, addImportsDir, addComponentsDir, addPlugin} from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addImportsDir, addComponentsDir, addPlugin } from '@nuxt/kit'
 
 export interface BullwarkOptions {
   devMode: boolean
@@ -12,7 +12,7 @@ export interface BullwarkOptions {
 
 export default defineNuxtModule<BullwarkOptions>({
   meta: {
-    name: 'theuxdev/bullwark-nuxt',
+    name: 'theuxdev/Bullwark Nuxt',
     configKey: 'bullwark',
     compatibility: {
       nuxt: '>=3.0.0',
