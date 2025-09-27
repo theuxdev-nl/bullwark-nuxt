@@ -1,5 +1,5 @@
 import { useNuxtApp, useState } from '#app'
-import type { BullwarkSdk, LoginCredentials, User } from '@dutchbull95/bullwark-npm-sdk'
+import type { BullwarkSdk, LoginCredentials, User } from '@theuxdev/bullwark-npm-sdk'
 import { readonly } from '@vue/reactivity'
 
 export const useBullwark = () => {
