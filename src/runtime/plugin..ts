@@ -16,23 +16,6 @@ export default defineNuxtPlugin(() => {
     autoRefreshBuffer: bullwarkConfig.autoRefreshBuffer,
   })
 
-  // // Set up global event listeners at the plugin level
-  // bullwarkSdk.on('userLoggedIn', (data) => {
-  //   console.log('🔐 Bullwark userLoggedIn event', data);
-  // });
-  //
-  // bullwarkSdk.on('userLoggedOut', () => {
-  //   console.log('🔐 Bullwark userLoggedOut event');
-  // });
-  //
-  // bullwarkSdk.on('userRefreshed', (data) => {
-  //   console.log('🔐 Bullwark userRefreshed event:', data);
-  // });
-  //
-  // bullwarkSdk.on('userHydrated', (data) => {
-  //   console.log('🔐 Bullwark userHydrated event:', data);
-  // });
-
   return {
     provide: {
       bullwark: bullwarkSdk,
