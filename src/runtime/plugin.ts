@@ -1,7 +1,7 @@
 // modules/idaas/runtime/plugin.ts
 import { defineNuxtPlugin } from '#imports'
-import { BullwarkSdk } from '@theuxdev/bullwark-npm-sdk'
 import { useRuntimeConfig } from '#app'
+import { BullwarkSdk } from '@dutchbull95/bullwark-sdk'
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()

@@ -14,28 +14,23 @@ Find and replace all on all files (CMD+SHIFT+F):
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module for doing amazing things.
-
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+Nuxt module built for Bullwark. 
 
 ## Features
 
 <!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- 🔐 JWT signature validation included (through public JWTs) 
+- 🔃 Auto refresh option includes when token is almost expired
 
 ## Quick Setup
 
 Install the module to your Nuxt application with one command:
 
 ```bash
-npx nuxi module add my-module
+npx nuxi module add bullwark-nuxt
 ```
 
-That's it! You can now use Bullwark Nuxt in your Nuxt app ✨
+That's it! You can now use Bullwark in your Nuxt app ✨
 
 
 ## Contribution
