@@ -4,7 +4,7 @@
     <button @click="handleLogin()">
       Login Test
     </button>
-    {{user}}
+    {{ user }}
   </div>
 </template>
 

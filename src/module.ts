@@ -36,15 +36,16 @@ export default defineNuxtModule<BullwarkOptions>({
     nuxt.options.runtimeConfig.public.bullwark = moduleOptions
 
     nuxt.hooks.hook('vite:extendConfig', (config) => {
+      config.resolve = config.resolve || {}
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'local-storage-fallback': 'local-storage-fallback/lib/index.js',
+      }
+
       config.ssr = config.ssr || {}
       config.ssr.noExternal = [
         ...(Array.isArray(config.ssr.noExternal) ? config.ssr.noExternal : []),
-        'local-storage-fallback',
-      ]
-      config.optimizeDeps = config.optimizeDeps || {}
-      config.optimizeDeps.include = [
-        ...(config.optimizeDeps.include || []),
-        'local-storage-fallback',
+        '@theuxdev/bullwark-sdk',
       ]
     })
 
