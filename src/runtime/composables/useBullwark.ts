@@ -94,6 +94,18 @@ export const useBullwark = () => {
     }
   }
 
+  const userUuid: ?string = () => {
+    return bullwark.getUserUuid()
+  }
+
+  const tenantUuid: ?string = () => {
+    return bullwark.getTenantUuid()
+  }
+
+  const customerUuid: ?string = () => {
+    return bullwark.getCustomerUuid()
+  }
+
   const userCan = (abilityUuid: string) => {
     if (!abilityUuid) {
       console.error('AbilityUuid missing')
@@ -138,6 +150,9 @@ export const useBullwark = () => {
     isInitialized: readonly(isInitialized),
     loading: readonly(loading),
     user: readonly(user),
+    userUuid: readonly(userUuid),
+    tenantUuid: readonly(tenantUuid),
+    customerUuid: readonly(customerUuid),
     userCan,
     userCanKey,
     userHasRole,
