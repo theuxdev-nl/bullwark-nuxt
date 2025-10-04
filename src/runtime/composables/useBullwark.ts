@@ -26,6 +26,22 @@ export const useBullwark = () => {
 
   const isInitialized = useState<boolean>('bullwark.initialized', () => false)
 
+  const waitForInitialization = (): Promise<void> => {
+    return new Promise((resolve) => {
+      if (isInitialized.value) {
+        resolve()
+        return
+      }
+
+      const unwatch = watch(isInitialized, (newValue) => {
+        if (newValue) {
+          unwatch()
+          resolve()
+        }
+      })
+    })
+  }
+
   if (import.meta.client && !isInitialized.value) {
     const sdkUser = bullwark.getUser() || null
     if (sdkUser && !user.value) {
@@ -116,5 +132,6 @@ export const useBullwark = () => {
     userHasRoleKey,
     syncFromSDK,
     isInitialized: readonly(isInitialized),
+    waitForInitialization: readonly(waitForInitialization),
   }
 }
