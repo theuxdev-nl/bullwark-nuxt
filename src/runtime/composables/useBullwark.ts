@@ -1,6 +1,6 @@
 import { useNuxtApp, useState } from '#app'
 import type { BullwarkSdk, User } from '@theuxdev/bullwark-npm-sdk'
-import { readonly } from '@vue/reactivity'
+import { readonly, watch } from '@vue/reactivity'
 
 export const useBullwark = () => {
   const { $bullwark } = useNuxtApp()
@@ -8,10 +8,22 @@ export const useBullwark = () => {
   const bullwark = $bullwark as BullwarkSdk
 
   if (import.meta.client) {
-    bullwark.on('userHydrated', (data: User) => user.value = data)
-    bullwark.on('userLoggedIn', (data: User) => user.value = data)
-    bullwark.on('userRefreshed', (data: User) => user.value = data)
-    bullwark.on('userLoggedOut', () => user.value = null)
+    bullwark.on('userHydrated', (data: User) => {
+      user.value = data
+      isLoggedIn.value = true
+    })
+    bullwark.on('userLoggedIn', (data: User) => {
+      user.value = data
+      isLoggedIn.value = true
+    })
+    bullwark.on('userRefreshed', (data: User) => {
+      user.value = data
+      isLoggedIn.value = true
+    })
+    bullwark.on('userLoggedOut', () => {
+      user.value = null
+      isLoggedIn.value = false
+    })
   }
 
   const user = useState<User | null>('bullwark.user', () => {
@@ -25,7 +37,6 @@ export const useBullwark = () => {
   const loading = useState<boolean>('bullwark.loading', () => false)
 
   const isInitialized = useState<boolean>('bullwark.initialized', () => false)
-
   const waitForInitialization = (): Promise<void> => {
     return new Promise((resolve) => {
       if (isInitialized.value) {
@@ -132,6 +143,6 @@ export const useBullwark = () => {
     userHasRoleKey,
     syncFromSDK,
     isInitialized: readonly(isInitialized),
-    waitForInitialization: readonly(waitForInitialization),
+    waitForInitialization: waitForInitialization(),
   }
 }
