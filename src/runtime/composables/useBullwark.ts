@@ -1,70 +1,67 @@
 import { useNuxtApp, useState } from '#app'
-import type { BullwarkSdk, User } from '@theuxdev/bullwark-npm-sdk'
-import { readonly, watch } from '@vue/reactivity'
+import type { BullwarkSdk, UserData } from '@theuxdev/bullwark-npm-sdk'
+import { watch } from '@vue/reactivity'
+import { computed } from 'vue'
 
 export const useBullwark = () => {
   const { $bullwark } = useNuxtApp()
-
   const bullwark = $bullwark as BullwarkSdk
 
-  if (import.meta.client) {
-    bullwark.on('userHydrated', (data: User) => {
-      user.value = data
-    })
-    bullwark.on('userLoggedIn', (data: User) => {
-      user.value = data
-    })
-    bullwark.on('userRefreshed', (data: User) => {
-      user.value = data
-    })
-    bullwark.on('userLoggedOut', () => {
-      user.value = null
-      isLoggedIn.value = false
-    })
-    bullwark.on('bullwarkLoaded', () => {
-      isLoggedIn.value = true
-      isInitialized.value = true
-    })
-  }
+  // Variables ================================================================================
 
-  const user = useState<User | null>('bullwark.user', () => {
-    if (import.meta.client) {
-      return bullwark.getUser() || null
-    }
-    return null
-  })
-
-  const isLoggedIn = useState<boolean>('bullwark.isLoggedIn', () => false)
+  const initialized = useState<boolean>('bullwark.initialized', () => false)
+  const userData = useState<UserData | null | undefined>('bullwark.userData', () => undefined)
+  const authenticated = useState<boolean>('bullwark.authenticated', () => false)
   const loading = useState<boolean>('bullwark.loading', () => false)
 
-  const isInitialized = useState<boolean>('bullwark.initialized', () => false)
+  const userUuid = computed(() => userData.value?.user?.uuid)
+  const tenantUuid = computed(() => userData.value?.user?.tenantUuid)
+  const customerUuid = computed(() => userData.value?.user?.customerUuid)
+
+  // Listeners ================================================================================
+
+  if (import.meta.client) {
+    bullwark.on('userHydrated', (data: { user: UserData }) => {
+      userData.value = data.user
+      authenticated.value = true
+    })
+    bullwark.on('userLoggedIn', (data: { user: UserData }) => {
+      userData.value = data.user
+      authenticated.value = true
+    })
+    bullwark.on('userRefreshed', (data: { user: UserData }) => {
+      userData.value = data.user
+    })
+    bullwark.on('userLoggedOut', () => {
+      userData.value = null
+      authenticated.value = false
+    })
+    bullwark.on('bullwarkLoaded', () => {
+      initialized.value = true
+    })
+
+    if (bullwark.getAuthenticated()) {
+      userData.value = bullwark.getUser()
+      authenticated.value = true
+    }
+  }
+
+  // Actions ================================================================================
+
   const waitForInitialization = (): Promise<void> => {
     return new Promise((resolve) => {
-      if (isInitialized.value) {
+      if (initialized.value) {
         resolve()
         return
       }
 
-      const unwatch = watch(isInitialized, (newValue) => {
+      const unwatch = watch(initialized, (newValue) => {
         if (newValue) {
           unwatch()
           resolve()
         }
       })
     })
-  }
-
-  if (import.meta.client && !isInitialized.value) {
-    const sdkUser = bullwark.getUser() || null
-    if (sdkUser && !user.value) {
-      user.value = sdkUser
-    }
-  }
-
-  const syncFromSDK = () => {
-    if (import.meta.client) {
-      user.value = bullwark.getUser() || null
-    }
   }
 
   const login = async (email: string, password: string) => {
@@ -92,18 +89,6 @@ export const useBullwark = () => {
         throw error
       }
     }
-  }
-
-  const userUuid: ?string = () => {
-    return bullwark.getUserUuid()
-  }
-
-  const tenantUuid: ?string = () => {
-    return bullwark.getTenantUuid()
-  }
-
-  const customerUuid: ?string = () => {
-    return bullwark.getCustomerUuid()
   }
 
   const userCan = (abilityUuid: string) => {
@@ -142,22 +127,23 @@ export const useBullwark = () => {
     return bullwark.userHasRoleKey(roleKey)
   }
 
+  // Returns ================================================================================
+
   return {
     bullwark,
+    initialized,
+    userData,
+    authenticated,
+    userUuid,
+    tenantUuid,
+    customerUuid,
+
+    waitForInitialization,
     login,
     logout,
-    isLoggedIn: readonly(isLoggedIn),
-    isInitialized: readonly(isInitialized),
-    loading: readonly(loading),
-    user: readonly(user),
-    userUuid: readonly(userUuid),
-    tenantUuid: readonly(tenantUuid),
-    customerUuid: readonly(customerUuid),
     userCan,
     userCanKey,
     userHasRole,
     userHasRoleKey,
-    syncFromSDK,
-    waitForInitialization: waitForInitialization(),
   }
 }

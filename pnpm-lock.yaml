@@ -12,8 +12,8 @@ importers:
         specifier: ^4.1.2
         version: 4.1.2(magicast@0.3.5)
       '@theuxdev/bullwark-npm-sdk':
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^0.0.8
+        version: 0.0.8
       jose:
         specifier: ^6.1.0
         version: 6.1.0
@@ -1173,8 +1173,8 @@ packages:
     peerDependencies:
       eslint: '>=9.0.0'
 
-  '@theuxdev/bullwark-npm-sdk@0.0.7':
-    resolution: {integrity: sha512-f3jJESPihP/z225fFbKNGOE+/eCXkNw4WH4sRwgGMP0CRyGbkf0ZB0J6kx7M/MCr6Vhd8rxva+WGVoDMs3jP0w==}
+  '@theuxdev/bullwark-npm-sdk@0.0.8':
+    resolution: {integrity: sha512-u1cjiBSZyVdWq17s12N2ZSu/kilikInw+lkXDW33/jfcG9OKyN0o5H+AupZk9AIzXTeYq8b3VmPcX8D4e5GXWA==}
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -5298,7 +5298,7 @@ snapshots:
       estraverse: 5.3.0
       picomatch: 4.0.3
 
-  '@theuxdev/bullwark-npm-sdk@0.0.7':
+  '@theuxdev/bullwark-npm-sdk@0.0.8':
     dependencies:
       axios: 1.12.2
       jose: 6.1.0
