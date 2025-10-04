@@ -10,19 +10,20 @@ export const useBullwark = () => {
   if (import.meta.client) {
     bullwark.on('userHydrated', (data: User) => {
       user.value = data
-      isLoggedIn.value = true
     })
     bullwark.on('userLoggedIn', (data: User) => {
       user.value = data
-      isLoggedIn.value = true
     })
     bullwark.on('userRefreshed', (data: User) => {
       user.value = data
-      isLoggedIn.value = true
     })
     bullwark.on('userLoggedOut', () => {
       user.value = null
       isLoggedIn.value = false
+    })
+    bullwark.on('bullwarkLoaded', () => {
+      isLoggedIn.value = true
+      isInitialized.value = true
     })
   }
 
@@ -58,7 +59,6 @@ export const useBullwark = () => {
     if (sdkUser && !user.value) {
       user.value = sdkUser
     }
-    isInitialized.value = true
   }
 
   const syncFromSDK = () => {
@@ -135,6 +135,7 @@ export const useBullwark = () => {
     login,
     logout,
     isLoggedIn: readonly(isLoggedIn),
+    isInitialized: readonly(isInitialized),
     loading: readonly(loading),
     user: readonly(user),
     userCan,
@@ -142,7 +143,6 @@ export const useBullwark = () => {
     userHasRole,
     userHasRoleKey,
     syncFromSDK,
-    isInitialized: readonly(isInitialized),
     waitForInitialization: waitForInitialization(),
   }
 }
