@@ -69,7 +69,6 @@ export const useBullwark = () => {
       loading.value = true
       try {
         const data = await bullwark.login(email, password)
-        syncFromSDK()
         return data
       }
       finally {
@@ -82,7 +81,6 @@ export const useBullwark = () => {
     if (import.meta.client) {
       try {
         await bullwark.logout()
-        syncFromSDK()
       }
       catch (error) {
         console.error('Logout error:', error)
