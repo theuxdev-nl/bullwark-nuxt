@@ -1,5 +1,5 @@
 import { useNuxtApp, useState } from '#app'
-import type { BullwarkSdk, LoginCredentials, User } from '@theuxdev/bullwark-npm-sdk'
+import type { BullwarkSdk, User } from '@theuxdev/bullwark-npm-sdk'
 import { readonly } from '@vue/reactivity'
 
 export const useBullwark = () => {
@@ -8,15 +8,15 @@ export const useBullwark = () => {
   const bullwark = $bullwark as BullwarkSdk
 
   if (import.meta.client) {
-    bullwark.on('userHydrated', data => user.value = data.user)
-    bullwark.on('userLoggedIn', data => user.value = data.user)
-    bullwark.on('userRefreshed', data => user.value = data.user)
+    bullwark.on('userHydrated', (data: User) => user.value = data)
+    bullwark.on('userLoggedIn', (data: User) => user.value = data)
+    bullwark.on('userRefreshed', (data: User) => user.value = data)
     bullwark.on('userLoggedOut', () => user.value = null)
   }
 
   const user = useState<User | null>('bullwark.user', () => {
     if (import.meta.client) {
-      return bullwark.state?.user || null
+      return bullwark.getUser() || null
     }
     return null
   })
@@ -27,7 +27,7 @@ export const useBullwark = () => {
   const isInitialized = useState<boolean>('bullwark.initialized', () => false)
 
   if (import.meta.client && !isInitialized.value) {
-    const sdkUser = bullwark.state?.user || null
+    const sdkUser = bullwark.getUser() || null
     if (sdkUser && !user.value) {
       user.value = sdkUser
     }
@@ -36,31 +36,34 @@ export const useBullwark = () => {
 
   const syncFromSDK = () => {
     if (import.meta.client) {
-      const sdkUser = bullwark.state?.user || null
-      user.value = sdkUser
+      user.value = bullwark.getUser() || null
     }
   }
 
-  const login = async (credentials: LoginCredentials) => {
-    loading.value = true
-    try {
-      const data = await bullwark.login(credentials)
-      syncFromSDK()
-      return data
-    }
-    finally {
-      loading.value = false
+  const login = async (email: string, password: string) => {
+    if (import.meta.client) {
+      loading.value = true
+      try {
+        const data = await bullwark.login(email, password)
+        syncFromSDK()
+        return data
+      }
+      finally {
+        loading.value = false
+      }
     }
   }
 
   const logout = async () => {
-    try {
-      await bullwark.logout()
-      syncFromSDK()
-    }
-    catch (error) {
-      console.error('Logout error:', error)
-      throw error
+    if (import.meta.client) {
+      try {
+        await bullwark.logout()
+        syncFromSDK()
+      }
+      catch (error) {
+        console.error('Logout error:', error)
+        throw error
+      }
     }
   }
 

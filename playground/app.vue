@@ -1,11 +1,18 @@
 <template>
   <div>
     <p>Nuxt module playground!</p>
-    {{ user }}
-    {{ isLoggedIn }}
+    <button @click="handleLogin()">
+      Login Test
+    </button>
+    {{user}}
   </div>
 </template>
 
 <script setup lang="ts">
-const { user, isLoggedIn } = useBullwark()
+import { useBullwark } from '../src/runtime/composables/useBullwark'
+
+const { user, login } = useBullwark()
+const handleLogin = async () => {
+  await login('paul@test.nl', 'test')
+}
 </script>
