@@ -9,6 +9,7 @@ export default defineNuxtPlugin(() => {
   const bullwarkSdk = new BullwarkSdk({
     devMode: bullwarkConfig.devMode,
     apiUrl: bullwarkConfig.apiUrl,
+    jwkUrl: bullwarkConfig.jwkUrl,
     customerUuid: bullwarkConfig.customerUuid,
     tenantUuid: bullwarkConfig.tenantUuid,
     useCookie: bullwarkConfig.useCookie,

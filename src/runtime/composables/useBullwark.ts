@@ -68,8 +68,7 @@ export const useBullwark = () => {
     if (import.meta.client) {
       loading.value = true
       try {
-        const data = await bullwark.login(email, password)
-        return data
+        return await bullwark.login(email, password)
       }
       finally {
         loading.value = false
