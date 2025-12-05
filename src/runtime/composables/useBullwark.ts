@@ -136,6 +136,10 @@ export const useBullwark = () => {
     return bullwark.userHasRoleKey(roleKey)
   }
 
+  const refresh = async () => {
+    if (bullwark) await bullwark.refresh()
+  }
+
   // Returns ================================================================================
 
   return {
@@ -150,6 +154,7 @@ export const useBullwark = () => {
     waitForInitialization,
     login,
     logout,
+    refresh,
     setTenantUuid,
     setCustomerUuid,
 
