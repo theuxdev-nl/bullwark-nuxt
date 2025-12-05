@@ -1,10 +1,11 @@
 import type { BullwarkSdk, UserData } from '@theuxdev/bullwark-npm-sdk'
 import { watch } from '@vue/reactivity'
 import { computed } from 'vue'
+import { useNuxtApp, useState } from '#app'
 
 export const useBullwark = () => {
-  const { $bullwark } = useNuxtApp()
-  const bullwark = $bullwark as BullwarkSdk
+  const nuxtApp = useNuxtApp()
+  const bullwark = nuxtApp.$bullwark as BullwarkSdk
 
   // Variables ================================================================================
 
@@ -19,7 +20,7 @@ export const useBullwark = () => {
 
   // Listeners ================================================================================
 
-  if (import.meta.client) {
+  if (import.meta.client && bullwark) {
     bullwark.on('userHydrated', (data: { user: UserData }) => {
       userData.value = data.user
       authenticated.value = true
@@ -64,7 +65,7 @@ export const useBullwark = () => {
   }
 
   const login = async (email: string, password: string) => {
-    if (import.meta.client) {
+    if (import.meta.client && bullwark) {
       loading.value = true
       try {
         return await bullwark.login(email, password)
@@ -76,7 +77,7 @@ export const useBullwark = () => {
   }
 
   const logout = async () => {
-    if (import.meta.client) {
+    if (import.meta.client && bullwark) {
       try {
         await bullwark.logout()
       }
@@ -88,11 +89,15 @@ export const useBullwark = () => {
   }
 
   const setTenantUuid = (uid: string) => {
-    bullwark.setTenantUuid(uid)
+    if (bullwark) {
+      bullwark.setTenantUuid(uid)
+    }
   }
 
   const setCustomerUuid = (uid: string) => {
-    bullwark.setCustomerUuid(uid)
+    if (bullwark) {
+      bullwark.setCustomerUuid(uid)
+    }
   }
 
   const userCan = (abilityUuid: string) => {
@@ -100,7 +105,7 @@ export const useBullwark = () => {
       console.error('AbilityUuid missing')
       return false
     }
-    if (import.meta.server) return false
+    if (import.meta.server || !bullwark) return false
     return bullwark.userCan(abilityUuid)
   }
 
@@ -109,7 +114,7 @@ export const useBullwark = () => {
       console.error('AbilityKey missing')
       return false
     }
-    if (import.meta.server) return false
+    if (import.meta.server || !bullwark) return false
     return bullwark.userCanKey(abilityKey)
   }
 
@@ -118,7 +123,7 @@ export const useBullwark = () => {
       console.error('RoleUuid missing')
       return false
     }
-    if (import.meta.server) return false // No role check on server
+    if (import.meta.server || !bullwark) return false // No role check on server
     return bullwark.userHasRole(roleUuid)
   }
 
@@ -127,7 +132,7 @@ export const useBullwark = () => {
       console.error('RoleKey missing')
       return false
     }
-    if (import.meta.server) return false // No role check on server
+    if (import.meta.server || !bullwark) return false // No role check on server
     return bullwark.userHasRoleKey(roleKey)
   }
 
