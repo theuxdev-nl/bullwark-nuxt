@@ -1,6 +1,6 @@
 {
   "name": "@theuxdev/bullwark-nuxt",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "Module to integrate Bullwark into your Nuxt app",
   "repository": "@theuxdev/bullwark-nuxt",
   "author": "Paul 'Bull' Brouwer",
