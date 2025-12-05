@@ -88,11 +88,11 @@ export const useBullwark = () => {
   }
 
   const setTenantUuid = (uid: string) => {
-    bullwark.setTenantUuid(uid);
+    bullwark.setTenantUuid(uid)
   }
 
   const setCustomerUuid = (uid: string) => {
-    bullwark.setCustomerUuid(uid);
+    bullwark.setCustomerUuid(uid)
   }
 
   const userCan = (abilityUuid: string) => {
