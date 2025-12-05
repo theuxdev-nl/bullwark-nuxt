@@ -1,4 +1,3 @@
-import { useNuxtApp, useState } from '#app'
 import type { BullwarkSdk, UserData } from '@theuxdev/bullwark-npm-sdk'
 import { watch } from '@vue/reactivity'
 import { computed } from 'vue'
@@ -88,6 +87,14 @@ export const useBullwark = () => {
     }
   }
 
+  const setTenantUuid = (uid: string) => {
+    bullwark.setTenantUuid(uid);
+  }
+
+  const setCustomerUuid = (uid: string) => {
+    bullwark.setCustomerUuid(uid);
+  }
+
   const userCan = (abilityUuid: string) => {
     if (!abilityUuid) {
       console.error('AbilityUuid missing')
@@ -138,6 +145,9 @@ export const useBullwark = () => {
     waitForInitialization,
     login,
     logout,
+    setTenantUuid,
+    setCustomerUuid,
+
     userCan,
     userCanKey,
     userHasRole,
