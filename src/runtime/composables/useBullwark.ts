@@ -1,4 +1,4 @@
-import type { BullwarkSdk, UserData } from '@theuxdev/bullwark-npm-sdk'
+import type { BullwarkSdk, User } from '@theuxdev/bullwark-npm-sdk'
 import { watch } from '@vue/reactivity'
 import { computed } from 'vue'
 import { useNuxtApp, useState } from '#app'
@@ -10,38 +10,48 @@ export const useBullwark = () => {
   // Variables ================================================================================
 
   const initialized = useState<boolean>('bullwark.initialized', () => false)
-  const userData = useState<UserData | null | undefined>('bullwark.userData', () => undefined)
+  const user = useState<User | null>('bullwark.user', () => null)
   const authenticated = useState<boolean>('bullwark.authenticated', () => false)
   const loading = useState<boolean>('bullwark.loading', () => false)
+  const jwt = useState<string | null | undefined>('bullwark.jwt', () => undefined)
 
-  const userUuid = computed(() => userData.value?.user?.uuid)
-  const tenantUuid = computed(() => userData.value?.user?.tenantUuid)
-  const customerUuid = computed(() => userData.value?.user?.customerUuid)
+  const userUuid = computed(() => user.value?.uuid)
+  const tenantUuid = computed(() => user.value?.tenantUuid)
+  const customerUuid = computed(() => user.value?.customerUuid)
 
   // Listeners ================================================================================
 
   if (import.meta.client && bullwark) {
-    bullwark.on('userHydrated', (data: { user: UserData }) => {
-      userData.value = data.user
+    bullwark.on('userHydrated', () => {
+      user.value = bullwark.getUser()
+      jwt.value = bullwark.getJwt()
       authenticated.value = true
     })
-    bullwark.on('userLoggedIn', (data: { user: UserData }) => {
-      userData.value = data.user
-      authenticated.value = true
+
+    bullwark.on('userLoggedIn', () => {
+      user.value = bullwark.getUser()
+      jwt.value = bullwark.getJwt()
+      authenticated.value = !!user.value
     })
-    bullwark.on('userRefreshed', (data: { user: UserData }) => {
-      userData.value = data.user
+
+    bullwark.on('userRefreshed', () => {
+      user.value = bullwark.getUser()
+      jwt.value = bullwark.getJwt()
+      authenticated.value = !!user.value
     })
+
     bullwark.on('userLoggedOut', () => {
-      userData.value = null
+      user.value = null
+      jwt.value = undefined
       authenticated.value = false
     })
+
     bullwark.on('bullwarkLoaded', () => {
       initialized.value = true
     })
 
     if (bullwark.getAuthenticated()) {
-      userData.value = bullwark.getUser()
+      user.value = bullwark.getUser()
       authenticated.value = true
     }
   }
@@ -100,56 +110,45 @@ export const useBullwark = () => {
     }
   }
 
-  const userCan = (abilityUuid: string) => {
-    if (!abilityUuid) {
-      console.error('AbilityUuid missing')
-      return false
-    }
-    if (import.meta.server || !bullwark) return false
-    return bullwark.userCan(abilityUuid)
-  }
-
-  const userCanKey = (abilityKey: string) => {
+  const userCan = (abilityKey: string) => {
     if (!abilityKey) {
-      console.error('AbilityKey missing')
+      console.error('abilityKey missing')
       return false
     }
-    if (import.meta.server || !bullwark) return false
-    return bullwark.userCanKey(abilityKey)
+    const u = user.value
+    if (!u) return false
+
+    return u.abilities?.includes(abilityKey) ?? false
   }
 
   const userHasRole = (roleUuid: string) => {
     if (!roleUuid) {
-      console.error('RoleUuid missing')
+      console.error('roleUuid missing')
       return false
     }
-    if (import.meta.server || !bullwark) return false // No role check on server
-    return bullwark.userHasRole(roleUuid)
-  }
+    const u = user.value
+    if (!u) return false
 
-  const userHasRoleKey = (roleKey: string) => {
-    if (!roleKey) {
-      console.error('RoleKey missing')
-      return false
-    }
-    if (import.meta.server || !bullwark) return false // No role check on server
-    return bullwark.userHasRoleKey(roleKey)
+    return u.roles?.includes(roleUuid) ?? false
   }
 
   const refresh = async () => {
     if (bullwark) await bullwark.refresh()
   }
 
+  const getUser = () => user.value
+
   // Returns ================================================================================
 
   return {
     bullwark,
     initialized,
-    userData,
+    user,
     authenticated,
     userUuid,
     tenantUuid,
     customerUuid,
+    jwt,
 
     waitForInitialization,
     login,
@@ -158,9 +157,8 @@ export const useBullwark = () => {
     setTenantUuid,
     setCustomerUuid,
 
+    getUser,
     userCan,
-    userCanKey,
     userHasRole,
-    userHasRoleKey,
   }
 }
