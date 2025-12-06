@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.39
+
+[compare changes](https://undefined/undefined/compare/v0.0.38...v0.0.39)
+
+### 🏡 Chore
+
+- **release:** V0.0.37 (a638916)
+
+### ❤️ Contributors
+
+- Paul Brouwer <pbrouwer@offertevergelijker.nl>
+
 ## v0.0.37
 
 [compare changes](https://undefined/undefined/compare/v0.0.38...v0.0.37)
