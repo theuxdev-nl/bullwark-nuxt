@@ -9,9 +9,9 @@ export const useBullwark = () => {
 
   // Variables ================================================================================
 
-  const initialized = useState<boolean>('bullwark.initialized', () => false)
+  const initialized = useState<boolean>('bullwark.initialized', () => bullwark.getIsInitialized())
   const user = useState<User | null>('bullwark.user', () => null)
-  const authenticated = useState<boolean>('bullwark.authenticated', () => false)
+  const authenticated = useState<boolean>('bullwark.authenticated', () => bullwark.getAuthenticated())
   const loading = useState<boolean>('bullwark.loading', () => false)
   const jwt = useState<string | null | undefined>('bullwark.jwt', () => undefined)
 
@@ -31,13 +31,13 @@ export const useBullwark = () => {
     bullwark.on('userLoggedIn', () => {
       user.value = bullwark.getUser()
       jwt.value = bullwark.getJwt()
-      authenticated.value = !!user.value
+      authenticated.value = true
     })
 
     bullwark.on('userRefreshed', () => {
       user.value = bullwark.getUser()
       jwt.value = bullwark.getJwt()
-      authenticated.value = !!user.value
+      authenticated.value = true
     })
 
     bullwark.on('userLoggedOut', () => {
